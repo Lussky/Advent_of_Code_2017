@@ -1,19 +1,21 @@
 #include <iostream>
+#include <string>
 
 int main()
 {
-	char t;
+	std::string t;
 	int sum = 0;
 	char temp = 0;
-	do
+	
+	std::cin >> t;
+	for (unsigned int i = 0; i < t.length(); ++i)
 	{
-		std::cin >> t;
-		if (t == temp)
+		if (t[i] == temp)
 		{
-			sum += t - 48;
+			sum += t[i] - 48;
 		}
-		temp = t;
-	} while ( t != '.' );
+		temp = t[i];
+	}
 	std::cout << sum;
 
 	system("PAUSE");
