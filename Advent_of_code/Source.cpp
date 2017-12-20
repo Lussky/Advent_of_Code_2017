@@ -1,17 +1,18 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <vector>
 
 int Find_Difference( std::string line );
+int Checksum( std::string line );
 
 int main()
 {
 	std::string line;
 	int sum = 0;
-	int n; std::cin >> n;
 
 	std::fstream file;
-	file.open("input.txt", std::ios::in);
+	file.open("input1.txt", std::ios::in);
 	
 	if (file.good() == false)
 	{
@@ -21,13 +22,7 @@ int main()
 
 	while (getline(file, line))
 	{
-		for (int i = 0; i < n; ++i)
-		{
-			//getline(std::cin, line);
-			sum += Find_Difference(line);
-			Find_Difference(line);
-			std::cout << Find_Difference(line) << std::endl;
-		}
+		sum += Checksum(line);
 	}
 	
 	file.close();
@@ -46,16 +41,16 @@ int Find_Difference( std::string line )
 	max = min = std::stoi(line.substr(0,4));
 
 	for ( int i = 0; i < line.length(); ++i )
-	{
-		if ( line[i] == ' ' )
+	{	
+		if ( line[i] == '\t' )
 			continue;
 
-		if ( line[i + 1] != ' ' )
+		if ( line[i + 1] != '\t' )
 		{
 			segment = line[i];
 			for ( ; i < line.length(); ++i )
 			{
-				if ( line[i + 1] != ' ' )
+				if ( line[i + 1] != '\t' )
 					segment += line[i + 1];
 				else
 					break;
@@ -72,4 +67,58 @@ int Find_Difference( std::string line )
 	}
 
 	return max - min;
+}
+
+int Checksum( std::string line )
+{
+	int max, min, temp;
+	std::string segment;
+	std::vector <int> numbers;
+	max = min = std::stoi(line.substr(0, 4));
+
+	for (int i = 0; i < line.length(); ++i)
+	{
+		if (line[i] == '\t')
+			continue;
+
+		if (line[i + 1] != '\t')
+		{
+			segment = line[i];
+			for (; i < line.length(); ++i)
+			{
+				if (line[i + 1] != '\t')
+					segment += line[i + 1];
+				else
+					break;
+			}
+			temp = std::stoi(segment);
+		}
+		else
+			temp = line[i] - '0';
+
+		numbers.push_back( temp );
+	}
+
+	for ( int i = 0; i < numbers.size(); ++i )
+	{
+		for ( int j = i + 1; j < numbers.size(); ++j )
+		{
+			if ( numbers[i] < numbers[j] )
+			{
+				if ( (numbers[j] % numbers[i]) == 0 )
+				{
+					return numbers[j] / numbers[i];
+				}
+			}
+			else
+			{
+				if ( (numbers[i] % numbers[j]) == 0 )
+				{
+					return numbers[i] / numbers[j];
+				}
+			}
+		}
+	}
+
+	//return max/min;
 }
